@@ -127,14 +127,14 @@ const handleSave = async () => {
 
     <!-- ElementPlus 表格 -->
     <el-table :data="filteredIcons" class="w-full">
-      <el-table-column prop="name" label="图标名称" />
-      <el-table-column label="图标">
+      <el-table-column prop="name" label="图标名称" min-width="100" />
+      <el-table-column label="图标" width="80">
         <template #default="scope">
           <img v-if="scope.row.path" :src="scope.row.path" alt="图标" class="w-[32px] h-[32px] object-contain" />
         </template>
       </el-table-column>
       <el-table-column prop="remark" min-width="200" label="备注" />
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="140">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button size="small" type="danger" @click="handleDelete(scope.row)">删除</el-button>
@@ -166,63 +166,3 @@ const handleSave = async () => {
     </el-dialog>
   </div>
 </template>
-
-<style scoped>
-.app-container {
-  padding: 20px;
-}
-
-.search-box {
-  margin-bottom: 20px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.icons-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.icon-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 120px;
-  padding: 10px;
-  border: 1px solid #eee;
-  border-radius: 4px;
-}
-
-.icon-image {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-.icon-name {
-  text-align: center;
-  font-size: 14px;
-}
-
-.actions {
-  margin-top: 20px;
-  display: flex;
-  gap: 20px;
-}
-
-.action a {
-  color: #42b983;
-  text-decoration: none;
-}
-
-.action a:hover {
-  text-decoration: underline;
-}
-</style>
