@@ -1,9 +1,9 @@
 {
   "name": "filetypeico",
-  "version": "1.0.0",
-  "description": "An Electron application with Vue and TypeScript",
+  "version": "0.0.1",
+  "description": "一款基于 Vue3 和 Electron 开发的桌面软件，用于便捷快速修改文件夹图标，实现文件夹自定义。",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "modify.com",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",

@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const ELECTRON_API = (window as any).api
 
+type IconColumn = {
+  id: number;
+  name: string;
+  path: string;
+  file?: File | null;
+  remark?: string;
+}
 // 图标数据
-const icons = ref([])
+const icons = ref<IconColumn[]>([])
 
 // 初始化加载图标数据
 const loadIcons = async () => {
@@ -52,14 +58,26 @@ const fileInputRef = ref<HTMLInputElement | null>(null)
 // 打开新增对话框
 const handleAdd = () => {
   isEdit.value = false
-  currentIcon.value = { id: 0, name: '', path: '', file: null, remark: '' }
+  currentIcon.value = initRow()
   dialogVisible.value = true
+}
+
+const initRow = () => {
+  return { id: 0, name: '', path: '', file: null, remark: '' }
 }
 
 // 触发文件选择
 const handleFileSelect = () => {
   fileInputRef.value?.click()
 }
+
+const clearIconFile = () => {
+  currentIcon.value.file = null;
+  currentIcon.value.path = '';
+  if (fileInputRef.value) {
+    fileInputRef.value.value = '';
+  }
+};
 
 // 文件变化处理
 const handleFileChange = (event: Event) => {
@@ -73,6 +91,7 @@ const handleFileChange = (event: Event) => {
 const handleEdit = (row: any) => {
   isEdit.value = true
   currentIcon.value = { ...row }
+  console.log('edit ---- ', currentIcon.value)
   dialogVisible.value = true
 }
 
@@ -88,18 +107,6 @@ const handleDelete = async (row: any) => {
 
 // 保存操作
 const handleSave = async () => {
-  if (currentIcon.value.file) {
-    // 这里可以添加文件上传逻辑，例如使用 FileReader 读取文件内容
-    await new Promise<void>((resolve) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(currentIcon.value.file)
-      reader.onload = () => {
-        currentIcon.value.path = reader.result as string
-        resolve()
-      }
-    })
-  }
-
   if (isEdit.value) {
     const index = icons.value.findIndex(item => item.id === currentIcon.value.id)
     if (index !== -1) {
@@ -114,6 +121,33 @@ const handleSave = async () => {
   dialogVisible.value = false
   await saveIcons()
 }
+
+// 关闭弹框，清空数据
+const handleCancel = () => {
+  dialogVisible.value = false
+  currentIcon.value = initRow()
+}
+
+
+const handleAvatarChange = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file.raw)
+    reader.onload = () => {
+      currentIcon.value.path = reader.result as string
+      resolve(true)
+    }
+  })
+}
+
+const beforeAvatarUpload = (file) => {
+  const isPng = file.type === 'image/png'
+  if (!isPng) {
+    ElMessage.error('只能上传 PNG 格式的图片！')
+  }
+  return isPng
+}
+
 </script>
 
 <template>
@@ -148,21 +182,68 @@ const handleSave = async () => {
         <el-form-item label="名称">
           <el-input v-model="currentIcon.name" />
         </el-form-item>
-        <el-form-item label="图标文件">
-          <input ref="fileInputRef" type="file" accept=".png" style="display: none" @change="handleFileChange" />
-          <el-button @click="handleFileSelect">选择 PNG 文件</el-button>
-          <span v-if="currentIcon.file" class="ml-2">{{ currentIcon.file.name }}</span>
+
+        <el-form-item label="图标文件" v-if="false">
+          <template v-if="currentIcon.path">
+            <img :src="currentIcon.path" alt="Selected Icon"
+              style="max-width: 100px; max-height: 100px; margin-bottom: 10px;" />
+            <el-button type="danger" @click="clearIconFile">删除</el-button>
+          </template>
+          <template v-else>
+            <input ref="fileInputRef" type="file" accept=".png" style="display: none" @change="handleFileChange" />
+            <el-button @click="handleFileSelect">请上传图标</el-button>
+          </template>
         </el-form-item>
+
+        <el-form-item label="图标文件">
+          <el-upload class="avatar-uploader" :show-file-list="false" :before-upload="beforeAvatarUpload"
+            :on-change="handleAvatarChange">
+            <img v-if="currentIcon.path" :src="currentIcon.path" class="avatar"
+              style="max-width: 100px; max-height: 100px;" />
+            <el-icon v-else class="avatar-uploader-icon">
+              <Plus />
+            </el-icon>
+          </el-upload>
+        </el-form-item>
+
         <el-form-item label="备注">
           <el-input v-model="currentIcon.remark" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="flex justify-end space-x-2">
-          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button @click="handleCancel">取消</el-button>
           <el-button type="primary" @click="handleSave">确定</el-button>
         </span>
       </template>
     </el-dialog>
   </div>
 </template>
+
+<style scoped>
+.avatar-uploader {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader {
+  border-color: var(--el-color-primary);
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+</style>

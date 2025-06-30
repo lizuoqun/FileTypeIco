@@ -1,6 +1,8 @@
 # FileTypeIco
 
-![FileTypeIco Logo](./public/icon.png)
+<p align="center">
+    <img src="public/logo.png" alt="FileTypeIco Logo" width="128" height="128">
+</p>
 
 一款基于 Vue3 和 Electron 开发的桌面软件，用于便捷快速修改文件夹图标，实现文件夹自定义。
 
@@ -12,43 +14,12 @@
 
 ## 安装使用
 ### 环境准备
-- Node.js (v16 及以上版本)
-- npm (v8 及以上版本)
+- Node.js (v22.9.0)
+- npm (v10.8.3)
 
 ### 安装依赖
 ```bash
 npm install
-```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```
-
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-
-## Project Setup
-
-### Install
-
-```bash
-$ npm install
 ```
 
 ### Development
@@ -94,6 +65,3 @@ $ npm run build:linux
 
 ## 许可证
 本项目采用 [MIT 许可证](LICENSE)。
-```
-
-        
