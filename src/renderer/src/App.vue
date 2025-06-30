@@ -136,8 +136,8 @@ const handleSave = async () => {
       <el-table-column prop="remark" min-width="200" label="备注" />
       <el-table-column label="操作" width="140">
         <template #default="scope">
-          <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button link @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button link type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
