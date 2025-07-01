@@ -211,10 +211,10 @@ const beforeAvatarUpload = (file) => {
         </el-form-item>
       </el-form>
       <template #footer>
-        <span class="flex justify-end space-x-2">
+        <div class="flex justify-end">
           <el-button @click="handleCancel">取消</el-button>
           <el-button type="primary" @click="handleSave">确定</el-button>
-        </span>
+        </div>
       </template>
     </el-dialog>
   </div>
