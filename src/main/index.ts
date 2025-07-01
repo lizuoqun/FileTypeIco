@@ -20,7 +20,9 @@ function createWindow(): void {
     }
   })
 
-  mainWindow.webContents.openDevTools();
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -62,7 +64,7 @@ app.whenReady().then(() => {
     const userDataPath = app.getPath('userData')
     const filePath = path.join(userDataPath, 'icons.json')
     try {
-      console.log('filePath',filePath)
+      console.log('filePath', filePath)
       fs.writeFileSync(filePath, JSON.stringify(icons))
       return true
     } catch (error) {
