@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
+import dayjs from 'dayjs';
 
 const ELECTRON_API = (window as any).api
 
@@ -9,6 +10,7 @@ type IconColumn = {
   path: string;
   file?: File | null;
   remark?: string;
+  updateTime?: string;
 }
 // 图标数据
 const icons = ref<IconColumn[]>([])
@@ -107,15 +109,16 @@ const handleDelete = async (row: any) => {
 
 // 保存操作
 const handleSave = async () => {
+  const currentTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
   if (isEdit.value) {
     const index = icons.value.findIndex(item => item.id === currentIcon.value.id)
     if (index !== -1) {
-      icons.value[index] = { ...currentIcon.value }
+      icons.value[index] = { ...currentIcon.value, updateTime: currentTime }
       ElMessage.success('修改成功')
     }
   } else {
     const newId = icons.value.length > 0 ? Math.max(...icons.value.map(item => item.id)) + 1 : 1
-    icons.value.push({ ...currentIcon.value, id: newId })
+    icons.value.push({ ...currentIcon.value, id: newId, updateTime: currentTime })
     ElMessage.success('新增成功')
   }
   dialogVisible.value = false
@@ -151,22 +154,22 @@ const beforeAvatarUpload = (file) => {
 </script>
 
 <template>
-  <div class="p-2">
+  <div class="p-2 pt-0">
     <!-- 搜索框 -->
     <div class="mb-2 flex items-center">
-      <input v-model="searchKeyword" type="text" placeholder="搜索图标..."
-        class="w-full p-2 h-[26px] border border-gray-300 rounded-md" />
+      <el-input v-model="searchKeyword" type="text" placeholder="搜索图标..." class="w-full" />
       <el-button type="primary" @click="handleAdd" class="ml-[8px]">新增</el-button>
     </div>
 
     <!-- ElementPlus 表格 -->
-    <el-table :data="filteredIcons" class="w-full">
+    <el-table :data="filteredIcons" class="w-full" stripe border show-overflow-tooltip height="500px">
       <el-table-column prop="name" label="图标名称" min-width="100" />
       <el-table-column label="图标" width="80">
         <template #default="scope">
           <img v-if="scope.row.path" :src="scope.row.path" alt="图标" class="w-[32px] h-[32px] object-contain" />
         </template>
       </el-table-column>
+      <el-table-column prop="updateTime" width="180" label="更新时间" align="center" />
       <el-table-column prop="remark" min-width="200" label="备注" />
       <el-table-column label="操作" width="140" align="center">
         <template #default="scope">

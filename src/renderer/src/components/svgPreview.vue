@@ -1,5 +1,5 @@
 <template>
-    <div class="p-2">
+    <div class="p-2 pt-0">
         <input type="file" ref="fileInput" multiple accept=".svg" @change="handleFileChange" class="hidden" />
         <el-button type="primary" @click="triggerFileInput">上传 SVG 文件</el-button>
         <div class="preview-container flex flex-wrap gap-5 mt-5">

@@ -3,6 +3,9 @@ productName: filetypeico
 directories:
   buildResources: build
 files:
+  - "build/**"
+  - "out/**"  # 添加对编译输出目录的包含
+  - "other necessary files"
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
@@ -21,7 +24,7 @@ nsis:
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
-  include: "./src/main/installer.nsh"
+  script: "./src/main/installer.nsi"
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
