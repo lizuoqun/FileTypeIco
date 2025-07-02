@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import dayjs from 'dayjs';
+import { IconColumn } from '@renderer/types';
 
 const ELECTRON_API = (window as any).api
 
-type IconColumn = {
-  id: number;
-  name: string;
-  path: string;
-  file?: File | null;
-  remark?: string;
-  updateTime?: string;
-}
+
 // 图标数据
 const icons = ref<IconColumn[]>([])
 
@@ -54,7 +48,11 @@ const filteredIcons = computed(() => {
 // 对话框相关
 const dialogVisible = ref(false)
 const isEdit = ref(false)
-const currentIcon = ref({ id: 0, name: '', path: '', file: null as File | null, remark: '' })
+const currentIcon = ref<IconColumn>({
+  id: '',
+  name: '',
+  path: ''
+})
 const fileInputRef = ref<HTMLInputElement | null>(null)
 
 // 打开新增对话框
@@ -65,7 +63,7 @@ const handleAdd = () => {
 }
 
 const initRow = () => {
-  return { id: 0, name: '', path: '', file: null, remark: '' }
+  return { id: '', name: '', path: '', file: null, remark: '' }
 }
 
 // 触发文件选择
@@ -117,7 +115,7 @@ const handleSave = async () => {
       ElMessage.success('修改成功')
     }
   } else {
-    const newId = icons.value.length > 0 ? Math.max(...icons.value.map(item => item.id)) + 1 : 1
+    const newId = dayjs().format('YYYYMMDDhhmmss')
     icons.value.push({ ...currentIcon.value, id: newId, updateTime: currentTime })
     ElMessage.success('新增成功')
   }
@@ -166,7 +164,10 @@ const beforeAvatarUpload = (file) => {
       <el-table-column prop="name" label="图标名称" width="140" />
       <el-table-column label="图标" align="center" width="60">
         <template #default="scope">
-          <img v-if="scope.row.path" :src="scope.row.path" alt="图标" class="w-[32px] h-[32px] object-contain" />
+          <div v-if="scope.row.path">
+            <div v-if="scope.row.type === 'svg'" class="svg-preview w-full overflow-auto" v-html="scope.row.path" />
+            <img v-else :src="scope.row.path" alt="图标" class="w-[32px] h-[32px] object-contain" />
+          </div>
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" width="180" label="更新时间" align="center" />
@@ -199,12 +200,12 @@ const beforeAvatarUpload = (file) => {
         </el-form-item>
 
         <el-form-item label="图标文件">
-          <el-upload class="border-1 border-dashed rounded-md cursor-pointer relative overflow-hidden border-primary" :show-file-list="false" :before-upload="beforeAvatarUpload"
-            :on-change="handleAvatarChange">
+          <el-upload class="border-1 border-dashed rounded-md cursor-pointer relative overflow-hidden border-primary"
+            :show-file-list="false" :before-upload="beforeAvatarUpload" :on-change="handleAvatarChange">
             <img v-if="currentIcon.path" :src="currentIcon.path" class="avatar"
               style="max-width: 100px; max-height: 100px;" />
             <el-icon v-else class="text-7xl text-[#8c939d] !w-[100px] !h-[100px] text-center">
-              <Plus class="!w-[36px] !h-[36px]"/>
+              <Plus class="!w-[36px] !h-[36px]" />
             </el-icon>
           </el-upload>
         </el-form-item>
