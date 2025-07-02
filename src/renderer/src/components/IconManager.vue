@@ -162,19 +162,19 @@ const beforeAvatarUpload = (file) => {
     </div>
 
     <!-- ElementPlus 表格 -->
-    <el-table :data="filteredIcons" class="w-full" stripe border show-overflow-tooltip height="500px">
-      <el-table-column prop="name" label="图标名称" min-width="100" />
-      <el-table-column label="图标" width="80">
+    <el-table :data="filteredIcons" class="w-full" stripe border show-overflow-tooltip height="calc(100vh - 105px)">
+      <el-table-column prop="name" label="图标名称" width="140" />
+      <el-table-column label="图标" align="center" width="60">
         <template #default="scope">
           <img v-if="scope.row.path" :src="scope.row.path" alt="图标" class="w-[32px] h-[32px] object-contain" />
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" width="180" label="更新时间" align="center" />
       <el-table-column prop="remark" min-width="200" label="备注" />
-      <el-table-column label="操作" width="140" align="center">
+      <el-table-column label="操作" width="160" align="center">
         <template #default="scope">
-          <el-button link @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button link type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button text plain @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button text plain type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -199,12 +199,12 @@ const beforeAvatarUpload = (file) => {
         </el-form-item>
 
         <el-form-item label="图标文件">
-          <el-upload class="avatar-uploader" :show-file-list="false" :before-upload="beforeAvatarUpload"
+          <el-upload class="border-1 border-dashed rounded-md cursor-pointer relative overflow-hidden border-primary" :show-file-list="false" :before-upload="beforeAvatarUpload"
             :on-change="handleAvatarChange">
             <img v-if="currentIcon.path" :src="currentIcon.path" class="avatar"
               style="max-width: 100px; max-height: 100px;" />
-            <el-icon v-else class="avatar-uploader-icon">
-              <Plus />
+            <el-icon v-else class="text-7xl text-[#8c939d] !w-[100px] !h-[100px] text-center">
+              <Plus class="!w-[36px] !h-[36px]"/>
             </el-icon>
           </el-upload>
         </el-form-item>
@@ -222,31 +222,3 @@ const beforeAvatarUpload = (file) => {
     </el-dialog>
   </div>
 </template>
-
-<style scoped>
-.avatar-uploader {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader {
-  border-color: var(--el-color-primary);
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-}
-
-.avatar {
-  width: 100px;
-  height: 100px;
-  display: block;
-}
-</style>
