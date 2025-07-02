@@ -161,7 +161,7 @@ const beforeAvatarUpload = (file) => {
 
     <!-- ElementPlus 表格 -->
     <el-table :data="filteredIcons" class="w-full" stripe border show-overflow-tooltip height="calc(100vh - 105px)">
-      <el-table-column prop="name" label="图标名称" width="140" />
+      <el-table-column prop="name" label="图标名称" width="200" />
       <el-table-column label="图标" align="center" width="60">
         <template #default="scope">
           <div v-if="scope.row.path">
@@ -170,6 +170,7 @@ const beforeAvatarUpload = (file) => {
           </div>
         </template>
       </el-table-column>
+      <el-table-column prop="type" width="80" label="类型" align="center" />
       <el-table-column prop="updateTime" width="180" label="更新时间" align="center" />
       <el-table-column prop="remark" min-width="200" label="备注" />
       <el-table-column label="操作" width="160" align="center">

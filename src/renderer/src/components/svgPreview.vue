@@ -148,7 +148,7 @@ const handleSave = async (row: fileColumn) => {
             name: row.name.replace(/\.svg$/i, ''),
             path: row.content,
             remark: row.remark,
-            updateTime: dayjs().format('YYYY-MM-DD hh:mm:ss'),
+            updateTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             type: 'svg'
         };
         icons.value.push(svgData)
